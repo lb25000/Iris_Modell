@@ -1,4 +1,4 @@
-# Neuronales Netzwerk für den Iris-Datensatz
+# Neuronales Netzwerk zur Klassifizierung des Iris-Datensatzes
 
 ## Vorgehen
 
@@ -15,10 +15,6 @@ Für die Klassifikation wurde die **Cross-Entropy Loss** Funktion verwendet, die
 Zur Bewertung des Modells wurde eine **K-Fold Cross-Validation** mit 5 Folds durchgeführt. Diese Technik ermöglicht es, das Modell auf verschiedenen Trainings- und Validierungsdatensätzen zu testen, wodurch die Generalisierungsfähigkeit des Modells besser eingeschätzt werden kann. Die folgende Grafik zeigt das Prinzip:
 
 <img src="https://scikit-learn.org/stable/_images/grid_search_cross_validation.png" alt="K-Fold Cross Validation" width="60%">
-
-### Epochen und Training
-
-Das Modell wurde über **30 Epochen** trainiert. Während jeder Epoche durchläuft das Modell den gesamten Trainingsdatensatz ohne den jeweiligen Validierungsdatensatz, um seine Gewichte kontinuierlich zu aktualisieren und zu verbessern.
 
 ## Modellarchitektur
 
@@ -47,13 +43,23 @@ class NeuralNetwork(nn.Module):
         return logits
 ```
 
+### Epochen und Training
+
+Das neuronale Netzwerk wurde über eine unterschiedliche Anzahl von Epochen hinweg trainiert, um die optimale Epochenzahl zu ermitteln, die das Modell mit dem geringsten Cross Validation Loss (CVL) hervorbringt. In jeder Epoche wird der gesamte Trainingsdatensatz für alle k-fold Splits durchlaufen, sodass das Modell seine Gewichte kontinuierlich anpasst und verbessert.
+
+Der folgende Plot zeigt die Ergebnisse für Epochenzahlen von 10 bis 100. Während der CVL zunächst immer weiter abnimmt, ist 80 Epochen ein Anstieg und kein erneuter Abstieg zu beobachten, was auf ein Overfitting der Trainingsdaten hindeuten könnte.
+
+<img src="epoch_plot_10-100.png" alt="Epoch Plot 10-100" width="100%">
+
+Schliesslich wurde das Modell ausgewählt, das über **75 Epochen** trainiert wurde.
+
 ## Ergebnisse
 
 Das Modell wurde auf einem Testdatensatz validiert, der 20% der gesamten Daten ausmacht. Hierbei erreichte das Modell eine höhere Accuracy als auf den Validierungsdaten, was darauf hindeutet, dass kein Overfitting vorliegt.
 
-- Accuracy auf Testdaten: 100.0 %
-- Durchschnittliche Accuracy über alle Folds (Validierungsdaten): 90.0 %
-- Cross-Validation Error: 0.296
+- **Accuracy auf Testdaten: 100.0 %**
+- Durchschnittliche Accuracy über alle Folds (Validierungsdaten): 96.67 %
+- Cross-Validation Error: 0.0365
 
 ## Visualisierung der Ergebnisse
 
